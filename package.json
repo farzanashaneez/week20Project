@@ -1,0 +1,18 @@
+{
+  "dependencies": {
+    "express": "^4.21.0",
+    "nodemon": "^3.1.7"
+  },
+  "name": "week20project",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon UMSapi/index.js",
+    "start":"node UMSapi/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
