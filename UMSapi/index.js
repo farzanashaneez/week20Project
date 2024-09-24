@@ -1,19 +1,22 @@
 import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
+import cors from 'cors'
+
 dotenv.config();
-import userRouter from './routes/userroute.js';
-import authRouter from './routes/authroute.js'
+import userRouter from './routes/clientroutes/userroute.js';
+import authRouter from './routes/clientroutes/authroute.js'
 
 mongoose
   .connect(process.env.MONGO_CONNECT)
   .then(() => {console.log('connected to mongodb')})
   .catch((err) => {
-    console.log(err)
+    console.log("error",err)
   });
 
 const app = express();
 app.use(express.json());
+//app.use(cors());
 
 app.use('/api/user',userRouter);
 app.use('/api/signup',authRouter);
@@ -21,6 +24,7 @@ app.use('/api/signup',authRouter);
 app.use((err,req,res,next)=>{
 const statusCode=err.statusCode || 500;
 const message = err.message || "internal server error";
+console.log(message)
 return res.status(statusCode).json({
     success:false,
     message,

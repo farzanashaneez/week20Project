@@ -12,10 +12,10 @@ const Header = () => {
             <text
               x="20"
               y="35"
-              font-family="Comic Sans MS, sans-serif"
-              font-size="25"
+              fontFamily="Comic Sans MS, sans-serif"
+              fontSize="25"
               fill="#ffffff"
-              font-weight="bold"
+              fontWeight="bold"
             >
               UMS
             </text>
@@ -23,8 +23,8 @@ const Header = () => {
             <text
               x="90"
               y="35"
-              font-family="Comic Sans MS, sans-serif"
-              font-size="20"
+              fontFamily="Comic Sans MS, sans-serif"
+              fontSize="20"
               fill="#ffffff"
             >
               Client
