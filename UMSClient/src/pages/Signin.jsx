@@ -9,7 +9,7 @@ import {useDispatch, useSelector} from 'react-redux'
 const Signin = () => {
   const [formData, setFormData] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
-const {loading,error}=useSelector(state=>{ console.log('state',state);return state.user})
+const {loading,error}=useSelector(state=>state.user)
 console.log(error) 
 const [validationErrors, setValidationErrors] = useState({});
   const navigate=useNavigate();
