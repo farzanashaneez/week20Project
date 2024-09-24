@@ -1,32 +1,17 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link,useNavigate } from "react-router-dom";
 import Signin from "./Signin.jsx";
 import axios from "axios";
 import Modal from "../portalComponenets/modal.jsx";
+import { validateForm } from "../helperFunctions/helpers.js";
 
-const validateForm = (formData) => {
-  const newErrors = {};
-  if (!formData.username) {
-      newErrors.username = 'Username is required.';
-  }
-  if (!formData.email) {
-      newErrors.email = 'Email is required.';
-  } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Email address is invalid.';
-  }
-  if (!formData.password) {
-      newErrors.password = 'Password is required.';
-  } else if (formData.password.length < 6) {
-      newErrors.password = 'Password must be at least 6 characters long.';
-  }
-  return newErrors;
-};
+
 const Signup = () => {
   const [formData, setFormData] = useState({});
   const [error,setError]=useState(false);
   const [loading,setLoading]=useState(false);
   const [validationErrors, setValidationErrors] = useState({});
-
+const navigate=useNavigate()
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -37,7 +22,7 @@ const Signup = () => {
   console.log("form data", formData);
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const validationErrors = validateForm(formData);
+    const validationErrors = validateForm(formData,"signup");
         
         if (Object.keys(validationErrors).length > 0) {
             setValidationErrors(validationErrors);
@@ -52,8 +37,8 @@ const Signup = () => {
     });
     setLoading(false);
     setError(false);
-    console.log("response",res)
-    }
+    navigate('/signin')
+    } 
     catch(err){
       setLoading(false);
       setError(true);
@@ -102,7 +87,7 @@ const Signup = () => {
           type="submit"
           className="bg-[#D86D25] text-white p-3 rounded-lg uppercase hover:opacity-75 hover:text-black"
         >
-          {loading ? 'loading...':'Signu Up'}
+          {loading ? 'loading...':'Sign Up'}
         </button>
       </form>
       <div className="flex gap-4 m-5">
