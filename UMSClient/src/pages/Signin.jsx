@@ -3,14 +3,17 @@ import { Link,useNavigate } from "react-router-dom";
 import axios from "axios";
 import Modal from "../portalComponenets/modal.jsx";
 import { validateForm } from "../helperFunctions/helpers.js";
-
+import { signInStart,signinFailure,signinSuccess } from "../redux/user/userSlice.js";
+import {useDispatch, useSelector} from 'react-redux'
 
 const Signin = () => {
   const [formData, setFormData] = useState({});
-  const [error,setError]=useState(false);
-  const [loading,setLoading]=useState(false);
-  const [validationErrors, setValidationErrors] = useState({});
+  const [isModalOpen, setIsModalOpen] = useState(false);
+const {loading,error}=useSelector(state=>{ console.log('state',state);return state.user})
+console.log(error) 
+const [validationErrors, setValidationErrors] = useState({});
   const navigate=useNavigate();
+  const dispatch=useDispatch();
 
   const handleChange = (e) => {
     setFormData({
@@ -19,7 +22,6 @@ const Signin = () => {
     });
     
   };
-  console.log("form data", formData);
   const handleSubmit = async (e) => {
     e.preventDefault();
     const validationErrors = validateForm(formData,"signin");
@@ -30,19 +32,19 @@ const Signin = () => {
         }
 
     try{
-      setLoading(true);
+      dispatch(signInStart());
       setValidationErrors({})
       const res = await axios.post("/api/auth/signin", formData, {
       "Content-Type": "application/json",
     });
-    setLoading(false);
-    setError(false);
-    console.log("response",res)
+   
+    dispatch(signinSuccess(res))
     navigate('/')
     }
     catch(err){
-      setLoading(false);
-      setError(true);
+      dispatch(signinFailure(err))
+      setIsModalOpen(true)
+
 
 
       console.log("error",err)
@@ -89,9 +91,9 @@ const Signin = () => {
         </Link>
       </div>
       <Modal 
-                isOpen={error} 
-                onClose={() => {setError(false); setValidationErrors({})}} 
-                message={"something"} 
+                isOpen={isModalOpen} 
+                onClose={() => { setIsModalOpen(false);setValidationErrors({})}} 
+                message={error?.response?.data?.message || "Invalid Credential"} 
             />
                 </div>
   );

@@ -24,11 +24,12 @@ app.use('/api/auth',authRouter);
 app.use((err,req,res,next)=>{
 const statusCode=err.statusCode || 500;
 const message = err.message || "internal server error";
-console.log(message,err)
+console.log("-----------------",message,err)
 return res.status(statusCode).json({
     success:false,
     message,
     statusCode,
+    testing:"iam tsting ---------xxxxxxxxxxxxx"
 })
 })
 app.listen(3000, () => {
