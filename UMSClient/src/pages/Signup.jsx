@@ -47,7 +47,7 @@ const Signup = () => {
     try{
       setLoading(true);
       setValidationErrors({})
-      const res = await axios.post("/api/signup", formData, {
+      const res = await axios.post("/api/auth/signup", formData, {
       "Content-Type": "application/json",
     });
     setLoading(false);

@@ -19,12 +19,12 @@ app.use(express.json());
 //app.use(cors());
 
 app.use('/api/user',userRouter);
-app.use('/api/signup',authRouter);
+app.use('/api/auth',authRouter);
 
 app.use((err,req,res,next)=>{
 const statusCode=err.statusCode || 500;
 const message = err.message || "internal server error";
-console.log(message)
+console.log(message,err)
 return res.status(statusCode).json({
     success:false,
     message,
