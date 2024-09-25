@@ -60,7 +60,7 @@ const Profile = () => {
           onChange={(e) => setImage(e.target.files[0])}
         />
         <img
-          src={currentUser.data.profilePicture}
+          src={formdata.profilePicture?formdata.profilePicture:currentUser.data.profilePicture}
           alt="profile"
           className="h-24 w-24 self-center cursor-pointer rounded-full object-cover mt-2"
           onClick={() => fileRef.current.click()}
@@ -69,7 +69,7 @@ const Profile = () => {
           {imageError?( 
             <span className=" text-red-700">Error Uploading Image(max size limit is 2Mb)</span>
           ):
-          imagepercent>0 && imagepercent<=100 ?(
+          imagepercent>0 && imagepercent<100 ?(
             <span className=" text-slate-700"> Uploading Image {imagepercent}%</span>
 
           ):(
