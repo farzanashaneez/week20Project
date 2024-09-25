@@ -7,9 +7,10 @@ const getuser=(req,res)=>{
     })
 }
 const updateuser=async(req,res,next)=>{
-    console.log("post is working",req.user,req.params.id)
+    console.log("post is working",req.user,req.body)
     const {username,email,profilePicture}=req.body;
     if(req.user.id!==req.params.id){
+        console.log("post is working error")
         return next(errorHandler(401,"you can update only your account"))
     }
       try{
