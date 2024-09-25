@@ -8,24 +8,31 @@ import {
 } from "firebase/storage";
 import { app } from "../../firebase";
 import axios from "axios";
-import {updateStart,updateSuccess,updateFailure} from "../redux/user/userSlice";
+import {
+  updateStart,
+  updateSuccess,
+  updateFailure,
+  deleteFailure,
+  deleteStart,
+  deleteSuccess,
+  signoutStart,
+  signoutSuccess,
+  signoutFailure,
+} from "../redux/user/userSlice";
 import Modal from "../portalComponenets/modal.jsx";
 
-
-
-
 const Profile = () => {
-  const { currentUser,loading,error } = useSelector((s) => s.user);
+  const { currentUser, loading, error } = useSelector((s) => s.user);
   const fileRef = useRef(null);
   const [image, setImage] = useState(undefined);
   const [imagepercent, setImagePercent] = useState(0);
   const [imageError, setImageError] = useState(false);
   const [formdata, setFormdata] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [validationerror,setValidationerror]=useState({});
+  const [validationerror, setValidationerror] = useState({});
 
-  const dispatch=useDispatch();
-  console.log("current user",loading,error );
+  const dispatch = useDispatch();
+  console.log("current user", loading, error);
 
   useEffect(() => {
     if (image) {
@@ -63,48 +70,65 @@ const Profile = () => {
       [e.target.id]: e.target.value,
     });
   };
-  const handleSubmit = async(e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-       
-    
+
     const errors = {};
 
-    
     if (!formdata.username) {
-        errors.username = 'Username is required.';
+      errors.username = "Username is required.";
     }
 
-    
     if (!formdata.email) {
-        errors.email = 'Email is required.';
-    } 
+      errors.email = "Email is required.";
+    }
     if (!/\S+@\S+\.\S+/.test(formdata.email)) {
-        errors.email = 'Email is invalid.';
+      errors.email = "Email is invalid.";
     }
 
-   
     if (Object.keys(errors).length > 0) {
-        setValidationerror(errors);
-        return;
+      setValidationerror(errors);
+      return;
     }
- 
-      
+
     try {
-    dispatch(updateStart());
-      console.log("axios post url is =====>> ",`/api/user/update/${currentUser.data._id}`)
-      const result=await axios.post(`/api/user/update/${currentUser.data._id}`,formdata, {
-        "Content-Type": "application/json",
-      })
-      console.log("result",result)
+      dispatch(updateStart());
+      console.log(
+        "axios post url is =====>> ",
+        `/api/user/update/${currentUser.data._id}`
+      );
+      const result = await axios.post(
+        `/api/user/update/${currentUser.data._id}`,
+        formdata,
+        {
+          "Content-Type": "application/json",
+        }
+      );
+      console.log("result", result);
       dispatch(updateSuccess(result));
-
-
     } catch (err) {
       dispatch(updateFailure(err));
-      setIsModalOpen(true)
+      setIsModalOpen(true);
+    }
+  };
+  const handleDelete = async() => {
+    if (!window.confirm("Are you sure you want to delete this user?")) {
+      return; // Exit if user cancels
+  }
+    console.log("delete button clicked")
+    try {
+      dispatch(deleteStart());
+      const result=await axios.delete(`/api/user/delete/${currentUser.data._id}`)
+      dispatch(deleteSuccess(result));
 
+    } catch (err) {
+      dispatch(deleteFailure(err));
 
     }
+  };
+  const handleSignout =async () => {
+    try {
+    } catch (err) {}
   };
   return (
     <div className="p-3 max-w-lg mx-auto">
@@ -152,8 +176,8 @@ const Profile = () => {
           onChange={handleChange}
         />
         {validationerror.username && (
-                        <p className="text-red-500 text-sm">{validationerror.username}</p>
-                    )}
+          <p className="text-red-500 text-sm">{validationerror.username}</p>
+        )}
         <input
           defaultValue={currentUser.data.email}
           type="email"
@@ -163,22 +187,28 @@ const Profile = () => {
           onChange={handleChange}
         />
         {validationerror.email && (
-                        <p className="text-red-500 text-sm">{validationerror.email}</p>
-                    )}
+          <p className="text-red-500 text-sm">{validationerror.email}</p>
+        )}
 
         <button className="bg-[#17383c] text-white p-3 rounded-lg uppercase hover:opacity-85 disabled:opacity-50">
           Update
         </button>
       </form>
       <div className="flex justify-between mt-9">
-        <span className="text-amber-900 ml-5">Delete Account</span>
-        <span className="text-amber-900 mr-8">Sign out</span>
+        <span onClick={handleDelete} className="text-amber-900 ml-5 cursor-pointer hover:opacity-60">
+          Delete Account
+        </span>
+        <span onClick={handleSignout} className="text-amber-900 mr-8 cursor-pointer hover:opacity-60">
+          Sign out
+        </span>
       </div>
-      <Modal 
-                isOpen={isModalOpen} 
-                onClose={() => { setIsModalOpen(false);}} 
-                message={error?.response?.data?.message || "Invalid Credential"} 
-            />
+      <Modal
+        isOpen={isModalOpen}
+        onClose={() => {
+          setIsModalOpen(false);
+        }}
+        message={error?.response?.data?.message || "Invalid Credential"}
+      />
     </div>
   );
 };

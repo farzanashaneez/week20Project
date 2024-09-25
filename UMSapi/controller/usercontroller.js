@@ -1,11 +1,7 @@
 import User from "../models/usermodel.js"
 import { errorHandler } from "../utils/error.js"
 
-const getuser=(req,res)=>{
-    res.json({
-        message:"api working"
-    })
-}
+
 const updateuser=async(req,res,next)=>{
     console.log("post is working",req.user,req.body)
     const {username,email,profilePicture}=req.body;
@@ -23,8 +19,22 @@ const updateuser=async(req,res,next)=>{
         res.status(200).json(rest)
       }
       catch(err){
-
+        next(errorHandler(500,err.message))
       }
     
 }
-export {getuser,updateuser}
+const deleteUser=async(req,res,next)=>{
+    if(req.user.id!==req.params.id){
+        console.log("delete is working error")
+        return next(errorHandler(401,"you can update only your account"))
+    }
+      try{
+       await User.findByIdAndDelete(req.params.id)
+       res.status(200).json('account deleted successfully')
+      }
+      catch(err){
+        next(errorHandler(500,err.message))
+
+      }
+}
+export {deleteUser,updateuser}
