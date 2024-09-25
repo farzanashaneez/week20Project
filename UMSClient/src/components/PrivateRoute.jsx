@@ -5,7 +5,7 @@ import {Outlet,Navigate}from 'react-router-dom'
 const PrivateRoute = () => {
     const {currentUser}=useSelector(s=>s.user);
     console.log("in private route",currentUser)
-    return currentUser ? <Outlet /> : <Navigate to="/signin" />;
+    return currentUser ? <Outlet/> : <Navigate to="/signin" />;
   
 }
 

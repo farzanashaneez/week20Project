@@ -19,7 +19,10 @@ function App() {
         <Route path='/about' element={<About/>}/>
         <Route path='/signin' element={<Signin/>}/>
         <Route path='/signup' element={<Signup/>}/>
-        <Route path='/profile' element={<PrivateRoute><Profile /></PrivateRoute>} />
+        {/* <Route path='/profile' element={<PrivateRoute><Profile /></PrivateRoute>} /> */}
+       <Route element={<PrivateRoute/>}>
+       <Route path='/profile' element={<Profile/>}/>
+       </Route>
         <Route path='/*' element={<ErrorPage/>}/>
 
       </Routes>
