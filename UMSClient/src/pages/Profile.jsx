@@ -91,12 +91,7 @@ const Profile = () => {
           placeholder="Email "
           className="bg-slate-100 rounded-lg p-3 "
         />
-        <input
-          type="password"
-          id="password"
-          placeholder="Password"
-          className="bg-slate-100 rounded-lg p-3 "
-        />
+       
         <button className="bg-[#17383c] text-white p-3 rounded-lg uppercase hover:opacity-85 disabled:opacity-50">
           Update
         </button>
