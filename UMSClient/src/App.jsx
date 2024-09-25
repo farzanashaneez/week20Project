@@ -6,6 +6,8 @@ import Signup from './pages/Signup'
 import Profile from './pages/Profile'
 import ErrorPage from './pages/ErrorPage'
 import Header from './components/Header'
+import PrivateRoute from './components/PrivateRoute'
+
 
 function App() {
 
@@ -17,7 +19,7 @@ function App() {
         <Route path='/about' element={<About/>}/>
         <Route path='/signin' element={<Signin/>}/>
         <Route path='/signup' element={<Signup/>}/>
-        <Route path='/profile' element={<Profile/>}/>
+        <Route path='/profile' element={<PrivateRoute><Profile /></PrivateRoute>} />
         <Route path='/*' element={<ErrorPage/>}/>
 
       </Routes>

@@ -1,7 +1,10 @@
 import React from "react";
 import{Link}from 'react-router-dom'
+import {useSelector} from'react-redux'
 
 const Header = () => {
+  const {currentUser}=useSelector(state=>state.user)
+  console.log("current user",currentUser)
   return (
     <div className=" bg-[#2d6971] ">
       <div className="flex justify-between items-center m-8 mt-0 h-16">
@@ -37,12 +40,18 @@ const Header = () => {
           </svg>
           </div>
           </Link>
-        <ul className="flex gap-16 font-bold text-white">
+        <ul className="flex gap-6 md:gap-14 font-bold text-white items-center">
          <Link to={'/'}> <li>Home</li></Link>
          <Link to={'/about'}><li>About</li></Link>
-         <Link to={'/signin'}><li>Sign In</li></Link>
+         
+          {currentUser?(
+            <Link to={'/profile'}><img src={currentUser.data.profilePicture} alt="profile" className="h-10 w-10 rounded-full object-cover" /></Link>
+          ):(<Link to={'/signin'}><li>Sign In</li></Link>)}
+          
+          
         </ul>
       </div>
+    
     </div>
   );
 };
