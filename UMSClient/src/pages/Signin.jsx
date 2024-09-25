@@ -5,6 +5,7 @@ import Modal from "../portalComponenets/modal.jsx";
 import { validateForm } from "../helperFunctions/helpers.js";
 import { signInStart,signinFailure,signinSuccess } from "../redux/user/userSlice.js";
 import {useDispatch, useSelector} from 'react-redux'
+import OAuth from "../components/OAuth.jsx";
 
 const Signin = () => {
   const [formData, setFormData] = useState({});
@@ -83,6 +84,7 @@ const [validationErrors, setValidationErrors] = useState({});
         >
           {loading ? 'loading...':'Sign in'}
         </button>
+        <OAuth/>
       </form>
       <div className="flex gap-4 m-5">
         <p>Don't Have an account ?</p>

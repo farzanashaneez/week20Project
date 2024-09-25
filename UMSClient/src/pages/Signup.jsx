@@ -4,6 +4,7 @@ import Signin from "./Signin.jsx";
 import axios from "axios";
 import Modal from "../portalComponenets/modal.jsx";
 import { validateForm } from "../helperFunctions/helpers.js";
+import OAuth from "../components/OAuth.jsx";
 
 
 const Signup = () => {
@@ -89,6 +90,7 @@ const navigate=useNavigate()
         >
           {loading ? 'loading...':'Sign Up'}
         </button>
+        <OAuth/>
       </form>
       <div className="flex gap-4 m-5">
         <p>Have an account ?</p>
