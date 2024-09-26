@@ -6,6 +6,9 @@ import cookieparser from 'cookie-parser'
 dotenv.config();
 import userRouter from './routes/clientroutes/userroute.js';
 import authRouter from './routes/clientroutes/authroute.js'
+import adminauth from './routes/adminroutes/authroutes.js'
+import admindashboard from './routes/adminroutes/usersroute.js'
+
 
 mongoose
   .connect(process.env.MONGO_CONNECT)
@@ -20,6 +23,9 @@ app.use(cookieparser());
 
 app.use('/api/user',userRouter);
 app.use('/api/auth',authRouter);
+app.use('/api/admin/auth',adminauth);
+app.use('/api/admin/dashboard',admindashboard)
+
 
 app.use((err,req,res,next)=>{
 const statusCode=err.statusCode || 500;

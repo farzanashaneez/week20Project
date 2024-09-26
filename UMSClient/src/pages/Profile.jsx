@@ -27,8 +27,13 @@ const Profile = () => {
   const [image, setImage] = useState(undefined);
   const [imagepercent, setImagePercent] = useState(0);
   const [imageError, setImageError] = useState(false);
-  const [formdata, setFormdata] = useState({});
+  const [formdata, setFormdata] = useState({
+    username:currentUser.data.username,
+    email:currentUser.data.email
+  });
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isupdated, setIsupdated] = useState(false);
+
   const [validationerror, setValidationerror] = useState({});
 
   const dispatch = useDispatch();
@@ -74,7 +79,7 @@ const Profile = () => {
     e.preventDefault();
 
     const errors = {};
-
+    console.log(formdata)
     if (!formdata.username) {
       errors.username = "Username is required.";
     }
@@ -82,7 +87,8 @@ const Profile = () => {
     if (!formdata.email) {
       errors.email = "Email is required.";
     }
-    if (!/\S+@\S+\.\S+/.test(formdata.email)) {
+ 
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formdata.email)) {
       errors.email = "Email is invalid.";
     }
 
@@ -106,6 +112,9 @@ const Profile = () => {
       );
       console.log("result", result);
       dispatch(updateSuccess(result));
+      setIsupdated(true)
+
+
     } catch (err) {
       dispatch(updateFailure(err));
       setIsModalOpen(true);
@@ -135,6 +144,7 @@ const Profile = () => {
     
       const result=await axios.get(`/api/auth/signout`)
       dispatch(signoutSuccess(result));
+      
 
     } catch (err) {
    console.log(err)
@@ -205,6 +215,7 @@ const Profile = () => {
           Update
         </button>
       </form>
+      {isupdated && <p className="text-green-700 text-center mt-10 text-sm">Profile Updated successfully</p>}
       <div className="flex justify-between mt-9">
         <span onClick={handleDelete} className="text-amber-900 ml-5 cursor-pointer hover:opacity-60">
           Delete Account

@@ -1,4 +1,3 @@
-import { Console, error } from "console";
 import User from "../models/usermodel.js";
 import bcrypt from "bcryptjs";
 import { errorHandler } from "../utils/error.js";
@@ -38,7 +37,7 @@ const postSignin = async (req, res, next) => {
       .status(200)
       .json(rest);
   } catch (err) {
-    next(error);
+    next(err);
   }
 };
 const googleAuth = async (req, res, next) => {
@@ -88,4 +87,28 @@ const getSignout=(req,res,next)=>{
  console.log("insignout")
 res.clearCookie('access_token').status(200).json('signout success')
 }
-export { postSignup, postSignin, googleAuth,getSignout };
+const postchangepassword=async(req,res,next)=>{
+  console.log("update password is working",req.body)
+  const {femail,fpasswordone}=req.body;
+  
+    try{
+
+      const finduser=await User.findOne({email:femail})
+      if (!finduser) return next(errorHandler(401, "user not found..!"));
+
+      const hashedPassword = bcrypt.hashSync(fpasswordone, 10);
+      finduser.password=hashedPassword;
+      
+        await finduser.save();
+        console.log(finduser)
+
+        res.status(201).json({ message: "Password changed Successfully" });
+
+     
+    }
+    catch(err){
+      next(errorHandler(500,err.message))
+    }
+  
+}
+export { postSignup, postSignin, googleAuth,getSignout,postchangepassword };
