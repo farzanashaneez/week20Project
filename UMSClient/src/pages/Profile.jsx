@@ -127,8 +127,19 @@ const Profile = () => {
     }
   };
   const handleSignout =async () => {
+    if (!window.confirm("Are you sure you want to delete this user?")) {
+      return; // Exit if user cancels
+  }
+    console.log("signout button clicked")
     try {
-    } catch (err) {}
+    
+      const result=await axios.get(`/api/auth/signout`)
+      dispatch(signoutSuccess(result));
+
+    } catch (err) {
+   console.log(err)
+
+    }
   };
   return (
     <div className="p-3 max-w-lg mx-auto">

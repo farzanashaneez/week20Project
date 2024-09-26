@@ -1,4 +1,4 @@
-import { error } from "console";
+import { Console, error } from "console";
 import User from "../models/usermodel.js";
 import bcrypt from "bcryptjs";
 import { errorHandler } from "../utils/error.js";
@@ -84,4 +84,8 @@ const googleAuth = async (req, res, next) => {
     next(err);
   }
 };
-export { postSignup, postSignin, googleAuth };
+const getSignout=(req,res,next)=>{
+ console.log("insignout")
+res.clearCookie('access_token').status(200).json('signout success')
+}
+export { postSignup, postSignin, googleAuth,getSignout };

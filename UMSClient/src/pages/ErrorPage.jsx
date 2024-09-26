@@ -2,8 +2,11 @@ import React from 'react'
 
 const ErrorPage = () => {
   return (
-    <div>
-      ErrorPage
+    <div className='flex h-screen w-screen  items-center justify-center'>
+      <div className='text-7xl text-center'>
+      404:page not found ..!
+      </div>
+    
     </div>
   )
 }
