@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Modal from "../portalComponenets/modal.jsx";
@@ -14,7 +14,8 @@ import OAuth from "../components/OAuth.jsx";
 const Signin = () => {
   const [formData, setFormData] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { loading, error } = useSelector((state) => state.user);
+  const { loading, error,currentUser } = useSelector((state) => state.user);
+  
   const [validationErrors, setValidationErrors] = useState({});
   const [isForgetpassword, setIsForgetpassword] = useState(false);
   const emailref=useRef();
@@ -22,8 +23,15 @@ const Signin = () => {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  console.log(validationErrors, "validation errors");
+
+  useEffect(() => {
+    if (currentUser!==null) {
+      navigate("/"); // Redirect to home page if user is logged in
+    }
+  }, [currentUser, navigate]);
+
   const handleChange = (e) => {
+    console.log(e.target.id,e.target.value,)
     setFormData({
       ...formData,
       [e.target.id]: e.target.value,
@@ -59,11 +67,11 @@ const Signin = () => {
   const handleSubmitPasswordChange = async (e) => {
     e.preventDefault();
     const errors = {};
-
+console.log(formData)
     if (!formData.femail) {
       errors.femail = "Email is required.";
     }
-    if (!/\S+@\S+\.\S+/.test(formData.femail)) {
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.femail)) {
       errors.femail = "Email is invalid.";
     }
     if (!formData.fpasswordone) {
@@ -75,7 +83,7 @@ const Signin = () => {
     if (formData.fpasswordone !== formData.fpasswordtwo) {
       errors.fpasswordtwo = "in correct password";
     }
-    if (formData.fpasswordone.length < 6 ) {
+    if (formData.fpasswordone?.length < 6 ) {
       errors.fpasswordone = "password must be at least 6 charecter long ";
   }
 
@@ -140,7 +148,7 @@ const Signin = () => {
           <input
           ref={emailref}
             type="email"
-            placeholder="Email"
+            placeholder="fEmail"
             id="femail"
             className="bg-slate-100 p-3 rounded-lg"
             onChange={handleChange}

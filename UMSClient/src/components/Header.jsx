@@ -4,7 +4,7 @@ import {useSelector} from'react-redux'
 
 const Header = () => {
   const {currentUser}=useSelector(state=>state.user)
-  console.log("current user",currentUser)
+  const {admin}=useSelector(s=>s.admin)
   
   return (
     <div className=" bg-[#2d6971] ">

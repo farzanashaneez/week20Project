@@ -1,25 +1,27 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Modal from "../portalComponenets/modal.jsx";
 import { validateForm } from "../helperFunctions/helpers.js";
-import {
-  signInStart,
-  signinFailure,
-  signinSuccess,
-} from "../redux/user/userSlice.js";
+import { loggedin, loginfailure, loggedOut } from "../redux/user/adminSlice.js";
 import { useDispatch, useSelector } from "react-redux";
 import OAuth from "../components/OAuth.jsx";
 
 const AdminSignin = () => {
   const [formData, setFormData] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { loading, error } = useSelector((state) => state.user);
+  const { admin, isLogged } = useSelector((state) => state.admin);
   const [validationErrors, setValidationErrors] = useState({});
-  
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (isLogged) {
+      navigate("/admin/dashboard"); // Redirect to home page if user is logged in
+    }
+  }, [isLogged, navigate]);
+
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -36,23 +38,19 @@ const AdminSignin = () => {
     }
 
     try {
-      dispatch(signInStart());
       setValidationErrors({});
-      const res = await axios.post("/api/auth/signin", formData, {
+      const res = await axios.post("/api/admin/auth/signin", formData, {
         "Content-Type": "application/json",
       });
 
-      dispatch(signinSuccess(res));
-      navigate("/");
+      dispatch(loggedin(res.data));
+      navigate("/admin/dashboard");
     } catch (err) {
-      dispatch(signinFailure(err));
+      dispatch(loginfailure(err));
       setIsModalOpen(true);
-
-      console.log("error", err);
     }
   };
 
-  
   return (
     <div className="p-3 max-w-lg mx-auto">
       <h1 className="text-3xl text-center font-semibold my-10">Sign In</h1>
@@ -79,22 +77,20 @@ const AdminSignin = () => {
           <p className="text-red-500 text-sm">{validationErrors.password}</p>
         )}
         <button
-          disabled={loading}
           type="submit"
           className="bg-[#D86D25] text-white p-3 rounded-lg uppercase hover:opacity-75 hover:text-black"
         >
-          {loading ? "loading..." : "Sign in"}
+          Sign In
         </button>
       </form>
 
-     
       <Modal
         isOpen={isModalOpen}
         onClose={() => {
           setIsModalOpen(false);
           setValidationErrors({});
         }}
-        message={error?.response?.data?.message || "Invalid Credential"}
+        message={"Some thing went wrong"}
       />
     </div>
   );

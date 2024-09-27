@@ -25,7 +25,7 @@ const postSignin = async (req, res, next) => {
     console.log(password, validuser.password);
     const validpassword = bcrypt.compareSync(password, validuser.password);
     if (!validpassword) return next(errorHandler(401, "Wrong Credential"));
-    const token = jwt.sign({ id: validuser._id }, process.env.JWT_SECRET);
+    const token = jwt.sign({ id: validuser._id ,isAdmin:false}, process.env.JWT_SECRET);
     const { password: hashedPassword, ...rest } = validuser._doc;
 
     const oneHourLater = new Date(Date.now() + 3600000);

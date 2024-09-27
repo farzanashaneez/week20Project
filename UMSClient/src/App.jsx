@@ -10,12 +10,18 @@ import PrivateRoute from "./components/PrivateRoute";
 import Dashboard from "./pages/dashboard";
 import AdminPrivateRoute from "./components/AdminPrivateRoute";
 import AdminSignin from "./pages/AdminSignin";
+import AdminHeader from "./components/AdminHeader";
 
 
 function App() {
+  const isAdminRoute = location.pathname.startsWith("/admin");
+  console.log(isAdminRoute)
+
   return (
     <Router>
-      <Header />
+        
+         {isAdminRoute ? <AdminHeader /> : <Header />}
+
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />

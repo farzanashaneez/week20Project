@@ -21,6 +21,7 @@ import {
 } from "../redux/user/userSlice";
 import Modal from "../portalComponenets/modal.jsx";
 
+
 const Profile = () => {
   const { currentUser, loading, error } = useSelector((s) => s.user);
   const fileRef = useRef(null);
