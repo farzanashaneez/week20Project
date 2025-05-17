@@ -38,6 +38,7 @@ function App() {
           <Route path="/admin/dashboard" element={<Dashboard />} />
         </Route>
         <Route path="/*" element={<ErrorPage />} />
+        
       </Routes>
     </Router>
   );
